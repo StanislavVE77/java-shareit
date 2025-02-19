@@ -16,7 +16,7 @@ public class ItemInMemoryStorage implements ItemStorage {
     public List<Item> getAllItemsByUserId(Long userId) {
         List<Item> items = getAllItems()
                 .stream()
-                .filter(item -> item.getOwner().getId() == userId)
+                .filter(item -> Objects.equals(item.getOwner().getId(), userId))
                 .toList();
         return items;
     }

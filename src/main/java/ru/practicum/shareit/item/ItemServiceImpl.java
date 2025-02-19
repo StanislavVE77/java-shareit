@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.UserInMemoryStorage;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -56,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Пользователь не найден с ID: " + userId);
         }
         Item item = ItemMapper.toItem(user.get(), itemDto);
-        if (userId != item.getOwner().getId()) {
+        if (!Objects.equals(userId, item.getOwner().getId())) {
             throw new NotFoundException("У вещи другой владелец");
         }
         item = itemStorage.updateItem(itemId, item);
