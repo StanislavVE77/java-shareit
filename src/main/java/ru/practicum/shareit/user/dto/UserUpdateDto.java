@@ -1,23 +1,21 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.user.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserUpdateDto {
     private Long id;
 
     private String name;
 
+    @Email(message = "Электронная почта не соответствует формату")
     private String email;
 
 }

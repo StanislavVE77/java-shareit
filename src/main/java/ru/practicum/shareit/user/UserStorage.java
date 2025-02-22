@@ -12,9 +12,11 @@ public interface UserStorage {
 
     Optional<User> getUserByEmail(String email);
 
+    boolean existEmail(String email);
+
     User createUser(User user);
 
-    User updateUser(Long userId, User user);
+    User updateUser(User user);
 
     void removeUser(Long userId);
 }

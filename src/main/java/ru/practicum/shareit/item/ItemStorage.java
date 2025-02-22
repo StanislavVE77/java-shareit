@@ -12,7 +12,7 @@ public interface ItemStorage {
 
     Item createItem(Item item);
 
-    Item updateItem(Long itemId, Item item);
+    Item updateItem(Item item);
 
     List<Item> searchItems(String text);
 

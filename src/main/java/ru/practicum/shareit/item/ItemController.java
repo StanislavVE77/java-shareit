@@ -6,8 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.validation.ValidatorGroups;
+import ru.practicum.shareit.item.dto.ItemUpdateDto;
 
 import java.util.List;
 
@@ -43,9 +44,8 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Validated({ValidatorGroups.Create.class})
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @Valid ItemDto itemDto) {
+                              @RequestBody @Valid ItemCreateDto itemDto) {
         log.info("Пришел POST запрос /items с телом {}", itemDto);
         ItemDto newItem = itemService.createItem(userId, itemDto);
         log.info("Метод POST /items вернул ответ {}", newItem);
@@ -54,12 +54,12 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Validated({ValidatorGroups.Update.class})
     public ItemDto updateItem(@PathVariable("id") Long itemId,
                               @RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @Valid ItemDto itemDto) {
+                              @RequestBody @Valid ItemUpdateDto itemDto) {
         log.info("Пришел PATCH запрос /items с телом {}", itemDto);
-        ItemDto newItem = itemService.updateItem(userId, itemId, itemDto);
+        itemDto.setId(itemId);
+        ItemDto newItem = itemService.updateItem(userId, itemDto);
         log.info("Метод PATCH /items вернул ответ {}", newItem);
         return newItem;
     }
