@@ -1,8 +1,8 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
@@ -16,28 +16,16 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserInMemoryStorage userStorage;
+    @Autowired
+    private final UserRepository userRepository;
     private final UserMapper mapper;
 
-
-/*
     @Override
     public UserDto getUser(Long userId) {
-        return userStorage.getUserById(userId)
-                .map(UserMapper::toUserDto)
+        User user = Optional.of(userRepository.getById(userId))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
+        return mapper.toUserDto(user);
     }
-*/
-
-
-@Override
-public UserDto getUser(Long userId) {
-    User user = userStorage.getUserById(userId)
-            .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
-    return mapper.toUserDto(user);
-}
-
-
 
     @Override
     public UserDto createUser(UserCreateDto userDto) {
@@ -47,42 +35,30 @@ public UserDto getUser(Long userId) {
         if (userDto.getName() == null || userDto.getName().isEmpty()) {
             throw new ValidationException("Логин должен быть указан");
         }
-/*
-        Optional<User> alreadyExistUser = userStorage.getUserByEmail(userDto.getEmail());
-        if (alreadyExistUser.isPresent()) {
-            throw new ConflictException("Данный имейл уже используется");
-        }
-*/
-        if (userStorage.existEmail(userDto.getEmail())) {
-            throw new ConflictException("Данный имейл уже используется");
-        }
         User user = mapper.toCreateUser(userDto);
-        user = userStorage.createUser(user);
-        //return UserMapper.toUserDto(user);
+        user = userRepository.save(user);
         return mapper.toUserDto(user);
     }
 
     @Override
     public UserDto updateUser(UserUpdateDto userDto) throws NotFoundException {
         UserDto updUserDto = getUser(userDto.getId());
-/*
-        Optional<User> alreadyExistUser = userStorage.getUserByEmail(userDto.getEmail());
-        if (alreadyExistUser.isPresent()) {
-            throw new ConflictException("Данный имейл уже используется");
-        }
-*/
-        if (userStorage.existEmail(userDto.getEmail())) {
-            throw new ConflictException("Данный имейл уже используется");
-        }
         User user = mapper.toUpdateUser(userDto);
-        user = userStorage.updateUser(user);
-        //return UserMapper.toUserDto(user);
+        if (userDto.getEmail() == null) {
+            user.setEmail(updUserDto.getEmail());
+        }
+        if (userDto.getName() == null) {
+            user.setName(updUserDto.getName());
+        }
+        user = userRepository.save(user);
         return mapper.toUserDto(user);
     }
 
     @Override
     public void removeUser(Long userId) throws NotFoundException {
-        UserDto delUserDto = getUser(userId);
-        userStorage.removeUser(userId);
+        User user = mapper.toUser(getUser(userId));
+        userRepository.delete(user);
     }
+
+
 }

@@ -6,9 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemCreateDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.item.dto.*;
 
 import java.util.List;
 
@@ -35,9 +33,9 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto getItem(@PathVariable("id") Long itemId) {
+    public ItemBookingDto getItem(@PathVariable("id") Long itemId) {
         log.info("Пришел GET запрос /items/{}", itemId);
-        ItemDto item = itemService.getItem(itemId);
+        ItemBookingDto item = itemService.getItem(itemId);
         log.info("Метод GET /items/{} вернул ответ {}", itemId, item);
         return item;
     }
@@ -67,11 +65,22 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getSearchItems(@RequestParam(value = "text") String text,
-                                        @RequestHeader("X-Sharer-User-Id") long userId) {
+                                        @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Пришел GET запрос /items/search с text = {}", text);
         List<ItemDto> items = itemService.searchItems(text, userId);
         log.info("Метод GET /items/search вернул ответ {}", items);
         return items;
+    }
+
+    @PostMapping("/{id}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto createComment(@PathVariable("id") Long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @RequestBody @Valid CommentCreateDto commentDto) {
+        log.info("Пришел POST запрос /items/{}/comment с телом {}", itemId, commentDto);
+        CommentDto newComment = itemService.createComment(itemId, userId, commentDto);
+        log.info("Метод POST /items/{id}/comment вернул ответ {}", newComment);
+        return newComment;
     }
 
 }

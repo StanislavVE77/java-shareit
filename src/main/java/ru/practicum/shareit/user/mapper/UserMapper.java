@@ -1,16 +1,14 @@
 package ru.practicum.shareit.user.mapper;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.model.User;
 
-@Service
-//@RequiredArgsConstructor
+@Component
+@RequiredArgsConstructor
 public class UserMapper {
     public UserDto toUserDto(User user) {
         return new UserDto(
@@ -29,6 +27,14 @@ public class UserMapper {
     }
 
     public User toUpdateUser(UserUpdateDto userDto) {
+        return new User(
+                userDto.getId(),
+                userDto.getName(),
+                userDto.getEmail()
+        );
+    }
+
+    public User toUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),

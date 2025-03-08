@@ -20,6 +20,7 @@ import ru.practicum.shareit.user.dto.UserUpdateDto;
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/{id}")
@@ -44,7 +45,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@PathVariable("id") Long userId,
                               @RequestBody @Valid UserUpdateDto userDto) {
-        log.info("Пришел PATCH запрос /users с телом {}", userDto);
+        log.info("Пришел PATCH запрос /users с телом {} и id={}", userDto, userId);
         userDto.setId(userId);
         UserDto newUser = userService.updateUser(userDto);
         log.info("Метод PATCH /users вернул ответ {}", newUser);
