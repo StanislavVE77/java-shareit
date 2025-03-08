@@ -10,7 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @Table(name = "users", schema = "public")
 @Getter
-@Setter @ToString
+@Setter
+@ToString
 public class User {
 
     @Id
