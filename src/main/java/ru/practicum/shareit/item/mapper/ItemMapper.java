@@ -43,9 +43,7 @@ public class ItemMapper {
 
     private static Booking getNextBooking(List<Booking> bookings) {
         return bookings.stream()
-                .filter((Booking booking) -> booking.getStart().isAfter(LocalDateTime.now()))
-                .sorted(Comparator.comparing(Booking::getStart))
-                .findFirst()
+                .filter((Booking booking) -> booking.getStart().isAfter(LocalDateTime.now())).min(Comparator.comparing(Booking::getStart))
                 .orElse(null);
 
     }

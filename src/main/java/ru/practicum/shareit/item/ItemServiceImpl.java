@@ -28,10 +28,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemBookingDto getItem(Long itemId) {
-        Item item = itemRepository.getById(itemId);
+        Optional<Item> item = itemRepository.findById(itemId);
         List<Comment> comments = commentRepository.findByItem_Id(itemId);
         List<CommentDto> commentsDto = CommentMapper.toCommentsDto(comments);
-        ItemBookingDto itemBookingDto = Optional.of(ItemMapper.toItemBookingDto(item, bookingRepository.findByItem_Id(itemId), commentsDto))
+        ItemBookingDto itemBookingDto = Optional.of(ItemMapper.toItemBookingDto(item.get(), bookingRepository.findByItem_Id(itemId), commentsDto))
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена с ID: " + itemId));
 
         return itemBookingDto;

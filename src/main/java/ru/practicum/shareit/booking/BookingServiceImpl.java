@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService {
         if (user.isEmpty()) {
             throw new NotFoundException("Пользователь не найден с ID: " + userId);
         }
-        return Optional.of(bookingRepository.getById(bookingId))
+        return bookingRepository.findById(bookingId)
                 .map(BookingMapper::toBookingDto)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено с ID: " + bookingId));
     }

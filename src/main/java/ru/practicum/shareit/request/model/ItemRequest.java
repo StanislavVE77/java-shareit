@@ -5,8 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
-
 /**
  * TODO Sprint add-item-requests.
  */
