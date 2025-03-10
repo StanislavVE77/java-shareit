@@ -34,8 +34,8 @@ public class ItemInMemoryStorage implements ItemStorage {
     }
 
     @Override
-    public Item updateItem(Long itemId, Item item) {
-        Item updItem = items.get(itemId);
+    public Item updateItem(Item item) {
+        Item updItem = items.get(item.getId());
         if (item.getName() != null && !item.getName().isEmpty()) {
             updItem.setName(item.getName());
         }
@@ -53,7 +53,7 @@ public class ItemInMemoryStorage implements ItemStorage {
                     .stream()
                     .filter(item -> (item.getName().toUpperCase().contains(text.toUpperCase())
                             || item.getDescription().toUpperCase().contains(text.toUpperCase()))
-                            && item.getAvailable() == true)
+                            && item.getAvailable())
                     .toList();
             return items;
         } else {

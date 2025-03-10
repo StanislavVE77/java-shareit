@@ -1,31 +1,38 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.validation.ValidatorGroups;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
-/**
- * TODO Sprint add-controllers.
- */
-
-@Data
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@DynamicUpdate
+@Table(name = "users", schema = "public")
+@Getter
+@Setter
+@ToString
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = {ValidatorGroups.Create.class},
-            message = "Имя/Логин не может быть пустым")
+    @Column(name = "name")
     private String name;
 
-    @Email(groups = {ValidatorGroups.Create.class, ValidatorGroups.Update.class},
-            message = "Электронная почта не соответствует формату")
-    @NotBlank(groups = {ValidatorGroups.Create.class},
-            message = "Электронная почта не может быть пустой")
+    @Column(name = "email")
     private String email;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        return id != null && id.equals(((User) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

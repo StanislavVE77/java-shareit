@@ -27,11 +27,18 @@ public class UserInMemoryStorage implements UserStorage {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
+
         Optional<User> curUser = getAllUsers()
                 .stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst();
         return curUser;
+    }
+
+    @Override
+    public boolean existEmail(String email) {
+        return users.values().stream()
+                .anyMatch(user -> user.getEmail().equals(email));
     }
 
     @Override
@@ -43,8 +50,8 @@ public class UserInMemoryStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(Long userId, User user) {
-        User updUser = users.get(userId);
+    public User updateUser(User user) {
+        User updUser = users.get(user.getId());
         if (user.getName() != null && !user.getName().isEmpty()) {
             updUser.setName(user.getName());
         }

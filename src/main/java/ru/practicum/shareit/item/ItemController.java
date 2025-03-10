@@ -6,14 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.validation.ValidatorGroups;
+import ru.practicum.shareit.item.dto.*;
 
 import java.util.List;
-
-/**
- * TODO Sprint add-controllers.
- */
 
 @Slf4j
 @Validated
@@ -34,18 +29,17 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto getItem(@PathVariable("id") Long itemId) {
+    public ItemBookingDto getItem(@PathVariable("id") Long itemId) {
         log.info("Пришел GET запрос /items/{}", itemId);
-        ItemDto item = itemService.getItem(itemId);
+        ItemBookingDto item = itemService.getItem(itemId);
         log.info("Метод GET /items/{} вернул ответ {}", itemId, item);
         return item;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Validated({ValidatorGroups.Create.class})
     public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @Valid ItemDto itemDto) {
+                              @RequestBody @Valid ItemCreateDto itemDto) {
         log.info("Пришел POST запрос /items с телом {}", itemDto);
         ItemDto newItem = itemService.createItem(userId, itemDto);
         log.info("Метод POST /items вернул ответ {}", newItem);
@@ -54,12 +48,12 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Validated({ValidatorGroups.Update.class})
     public ItemDto updateItem(@PathVariable("id") Long itemId,
                               @RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @Valid ItemDto itemDto) {
+                              @RequestBody ItemUpdateDto itemDto) {
         log.info("Пришел PATCH запрос /items с телом {}", itemDto);
-        ItemDto newItem = itemService.updateItem(userId, itemId, itemDto);
+        itemDto.setId(itemId);
+        ItemDto newItem = itemService.updateItem(userId, itemDto);
         log.info("Метод PATCH /items вернул ответ {}", newItem);
         return newItem;
     }
@@ -67,11 +61,22 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getSearchItems(@RequestParam(value = "text") String text,
-                                        @RequestHeader("X-Sharer-User-Id") long userId) {
+                                        @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Пришел GET запрос /items/search с text = {}", text);
         List<ItemDto> items = itemService.searchItems(text, userId);
         log.info("Метод GET /items/search вернул ответ {}", items);
         return items;
+    }
+
+    @PostMapping("/{id}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto createComment(@PathVariable("id") Long itemId,
+                                    @RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @RequestBody @Valid CommentCreateDto commentDto) {
+        log.info("Пришел POST запрос /items/{}/comment с телом {}", itemId, commentDto);
+        CommentDto newComment = itemService.createComment(itemId, userId, commentDto);
+        log.info("Метод POST /items/{id}/comment вернул ответ {}", newComment);
+        return newComment;
     }
 
 }
