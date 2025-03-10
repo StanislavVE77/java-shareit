@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentCreateDto {
-    private Long id;
 
     @NotBlank(message = "Текст комментария не может быть пустым")
     private String text;

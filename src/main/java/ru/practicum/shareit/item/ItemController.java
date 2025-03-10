@@ -10,10 +10,6 @@ import ru.practicum.shareit.item.dto.*;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Slf4j
 @Validated
 @RestController
@@ -54,7 +50,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(@PathVariable("id") Long itemId,
                               @RequestHeader("X-Sharer-User-Id") long userId,
-                              @RequestBody @Valid ItemUpdateDto itemDto) {
+                              @RequestBody ItemUpdateDto itemDto) {
         log.info("Пришел PATCH запрос /items с телом {}", itemDto);
         itemDto.setId(itemId);
         ItemDto newItem = itemService.updateItem(userId, itemDto);

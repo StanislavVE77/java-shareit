@@ -12,9 +12,6 @@ import ru.practicum.shareit.booking.model.StateStatus;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Slf4j
 @Validated
 @RestController

@@ -24,14 +24,16 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
+    private final ItemMapper mapper;
+    private final CommentMapper commentMapper;
 
 
     @Override
     public ItemBookingDto getItem(Long itemId) {
         Optional<Item> item = itemRepository.findById(itemId);
         List<Comment> comments = commentRepository.findByItem_Id(itemId);
-        List<CommentDto> commentsDto = CommentMapper.toCommentsDto(comments);
-        ItemBookingDto itemBookingDto = Optional.of(ItemMapper.toItemBookingDto(item.get(), bookingRepository.findByItem_Id(itemId), commentsDto))
+        List<CommentDto> commentsDto = commentMapper.toCommentsDto(comments);
+        ItemBookingDto itemBookingDto = Optional.of(mapper.toItemBookingDto(item.get(), bookingRepository.findByItem_Id(itemId), commentsDto))
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена с ID: " + itemId));
 
         return itemBookingDto;
@@ -47,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
 
         return itemRepository.findByOwner_Id(userId)
                 .stream()
-                .map(ItemMapper::toItemDto)
+                .map(mapper::toItemDto)
                 .toList();
     }
 
@@ -57,9 +59,9 @@ public class ItemServiceImpl implements ItemService {
         if (user.isEmpty()) {
             throw new NotFoundException("Пользователь не найден с ID: " + userId);
         }
-        Item item = ItemMapper.toCreateItem(user.get(), itemDto);
+        Item item = mapper.toCreateItem(user.get(), itemDto);
         item = itemRepository.save(item);
-        return ItemMapper.toItemDto(item);
+        return mapper.toItemDto(item);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class ItemServiceImpl implements ItemService {
         item.get().setOwner(user.get());
 
         itemRepository.save(item.get());
-        return ItemMapper.toItemDto(item.get());
+        return mapper.toItemDto(item.get());
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<Item> items = itemRepository.searchItems(text);
         return items.stream()
-                .map(ItemMapper::toItemDto)
+                .map(mapper::toItemDto)
                 .toList();
     }
 
@@ -118,8 +120,8 @@ public class ItemServiceImpl implements ItemService {
         if (count == 0) {
             throw new ValidationException("Пользователь не может оставлять комментария для данной вещи.");
         }
-        Comment comment = CommentMapper.toCreateComment(item.get(), user.get(), commentDto);
+        Comment comment = commentMapper.toCreateComment(item.get(), user.get(), commentDto);
         comment = commentRepository.save(comment);
-        return CommentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(comment);
     }
 }

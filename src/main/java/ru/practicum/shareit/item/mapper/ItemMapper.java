@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemMapper {
 
-    public static ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(Item item) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
@@ -26,7 +26,7 @@ public class ItemMapper {
         );
     }
 
-    public static ItemBookingDto toItemBookingDto(Item item, List<Booking> bookings, List<CommentDto> comments) {
+    public ItemBookingDto toItemBookingDto(Item item, List<Booking> bookings, List<CommentDto> comments) {
         Booking lastBooking = getLastBooking(bookings);
         Booking nextBooking = getNextBooking(bookings);
 
@@ -41,23 +41,22 @@ public class ItemMapper {
         );
     }
 
-    private static Booking getNextBooking(List<Booking> bookings) {
+    private Booking getNextBooking(List<Booking> bookings) {
         return bookings.stream()
                 .filter((Booking booking) -> booking.getStart().isAfter(LocalDateTime.now())).min(Comparator.comparing(Booking::getStart))
                 .orElse(null);
 
     }
 
-    private static Booking getLastBooking(List<Booking> bookings) {
+    private Booking getLastBooking(List<Booking> bookings) {
         return bookings.stream()
                 .filter((Booking booking) -> booking.getStatus() == BookingStatus.CANCELED)
                 .filter((Booking booking) -> booking.getEnd().isBefore(LocalDateTime.now())).max(Comparator.comparing(Booking::getEnd))
                 .orElse(null);
     }
 
-    public static Item toCreateItem(User curUser, ItemCreateDto itemDto) {
+    public Item toCreateItem(User curUser, ItemCreateDto itemDto) {
         Item item = new Item();
-        item.setId(itemDto.getId());
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
@@ -71,7 +70,7 @@ public class ItemMapper {
         return item;
     }
 
-    public static Item toUpdateItem(User curUser, ItemUpdateDto itemDto) {
+    public Item toUpdateItem(User curUser, ItemUpdateDto itemDto) {
         Item item = new Item();
         item.setId(itemDto.getId());
         item.setName(itemDto.getName());

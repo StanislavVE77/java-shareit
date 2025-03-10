@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,10 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
-
-/**
- * TODO Sprint add-controllers.
- */
 
 @Slf4j
 @Validated
@@ -44,7 +41,7 @@ public class UserController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@PathVariable("id") Long userId,
-                              @RequestBody @Valid UserUpdateDto userDto) {
+                              @RequestBody UserUpdateDto userDto) {
         log.info("Пришел PATCH запрос /users с телом {} и id={}", userDto, userId);
         userDto.setId(userId);
         UserDto newUser = userService.updateUser(userDto);

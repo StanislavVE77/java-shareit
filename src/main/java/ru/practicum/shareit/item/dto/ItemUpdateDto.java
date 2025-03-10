@@ -1,13 +1,10 @@
 package ru.practicum.shareit.item.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-/**
- * TODO Sprint add-controllers.
- */
 
 @Data
 @Builder(toBuilder = true)
@@ -15,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemUpdateDto {
 
+    @NotNull
     private Long id;
 
     private String name;

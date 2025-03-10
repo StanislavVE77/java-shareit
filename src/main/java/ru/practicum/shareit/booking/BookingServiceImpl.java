@@ -26,6 +26,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final BookingMapper mapper;
 
     @Override
     public BookingDto getBooking(Long bookingId, Long userId) {
@@ -33,9 +34,9 @@ public class BookingServiceImpl implements BookingService {
         if (user.isEmpty()) {
             throw new NotFoundException("Пользователь не найден с ID: " + userId);
         }
-        return bookingRepository.findById(bookingId)
-                .map(BookingMapper::toBookingDto)
+        Booking booking =  bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено с ID: " + bookingId));
+        return mapper.toBookingDto(booking);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class BookingServiceImpl implements BookingService {
         }
         List<Booking> bookings = bookingRepository.findByBookerIdAndState(userId, statusList);
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(mapper::toBookingDto)
                 .toList();
     }
 
@@ -66,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
         List<Booking> bookings = bookingRepository.findAllByItem_Id(itemsIds);
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(mapper::toBookingDto)
                 .toList();
     }
 
@@ -84,9 +85,9 @@ public class BookingServiceImpl implements BookingService {
         if (!item.get().getAvailable()) {
             throw new ValidationException("Вещь не доступна");
         }
-        Booking booking = BookingMapper.toCreateBooking(user.get(), item.get(), bookingDto);
+        Booking booking = mapper.toCreateBooking(user.get(), item.get(), bookingDto);
         booking = bookingRepository.save(booking);
-        return BookingMapper.toBookingDto(booking);
+        return mapper.toBookingDto(booking);
     }
 
     @Override
@@ -111,6 +112,6 @@ public class BookingServiceImpl implements BookingService {
         }
 
         bookingRepository.save(booking.get());
-        return BookingMapper.toBookingDto(booking.get());
+        return mapper.toBookingDto(booking.get());
     }
 }

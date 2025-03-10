@@ -7,17 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemCreateDto {
-
-    private Long id;
 
     @NotBlank(message = "Наименование не может быть пустым")
     private String name;

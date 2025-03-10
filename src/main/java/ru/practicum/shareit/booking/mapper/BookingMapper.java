@@ -12,7 +12,7 @@ import ru.practicum.shareit.user.model.User;
 @RequiredArgsConstructor
 public class BookingMapper {
 
-    public static BookingDto toBookingDto(Booking booking) {
+    public BookingDto toBookingDto(Booking booking) {
         return new BookingDto(
                 booking.getId(),
                 booking.getStart(),
@@ -23,9 +23,8 @@ public class BookingMapper {
         );
     }
 
-    public static Booking toCreateBooking(User curUser, Item curItem, BookingCreateDto bookingDto) {
+    public Booking toCreateBooking(User curUser, Item curItem, BookingCreateDto bookingDto) {
         Booking booking = new Booking();
-        booking.setId(bookingDto.getId());
         booking.setStart(bookingDto.getStart());
         booking.setEnd(bookingDto.getEnd());
         booking.setStatus(bookingDto.getStatus());

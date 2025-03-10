@@ -5,10 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import ru.practicum.shareit.user.model.User;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

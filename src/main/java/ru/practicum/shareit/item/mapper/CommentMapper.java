@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentMapper {
 
-    public static CommentDto toCommentDto(Comment comment) {
+    public CommentDto toCommentDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
@@ -23,15 +23,14 @@ public class CommentMapper {
         );
     }
 
-    public static List<CommentDto> toCommentsDto(List<Comment> comments) {
+    public List<CommentDto> toCommentsDto(List<Comment> comments) {
         return comments.stream()
-                .map(CommentMapper::toCommentDto)
+                .map(this::toCommentDto)
                 .toList();
     }
 
-    public static Comment toCreateComment(Item curItem, User curUser, CommentCreateDto commentDto) {
+    public Comment toCreateComment(Item curItem, User curUser, CommentCreateDto commentDto) {
         Comment comment = new Comment();
-        comment.setId(commentDto.getId());
         comment.setText(commentDto.getText());
 
         User user = new User();
