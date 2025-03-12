@@ -1,40 +1,47 @@
 package ru.practicum.shareit.item.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.model.ItemRequest;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.validation.ValidatorGroups;
 
-/**
- * TODO Sprint add-controllers.
- */
-
-@Data
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@DynamicUpdate
+@Table(name = "items", schema = "public")
+@Getter
+@Setter
+@ToString
 public class Item {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = {ValidatorGroups.Create.class},
-            message = "Наименование не может быть пустым")
+    @Column(name = "name")
     private String name;
 
-    @NotNull(groups = {ValidatorGroups.Create.class},
-            message = "Должно быть описание")
+    @Column(name = "description")
     private String description;
 
-    @NotNull(groups = {ValidatorGroups.Create.class},
-            message = "Должен быть статус")
+    @Column(name = "is_available")
     private Boolean available;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
-    private ItemRequest request;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        return id != null && id.equals(((Item) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }
