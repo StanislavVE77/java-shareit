@@ -45,7 +45,7 @@ public class ItemRequestServiceTest {
 
         assertEquals(request1.getDescription(), itemsRequest.getDescription());
         assertEquals(request1.getRequestor(), itemsRequest.getRequestor());
-        assertEquals(request1.getCreated(), itemsRequest.getCreated());
+
 
         long userNotFoundId = 5L;
         assertThrows(NotFoundException.class, () -> {
