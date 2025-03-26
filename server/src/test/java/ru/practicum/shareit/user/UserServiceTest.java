@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.TestData;
-import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -38,7 +37,7 @@ public class UserServiceTest {
 
     @Test
     @Order(1)
-    void GetUser() {
+    void getUser() {
         UserDto user = service.getUser(userDto1.getId());
 
         assertEquals(userDto1, user);

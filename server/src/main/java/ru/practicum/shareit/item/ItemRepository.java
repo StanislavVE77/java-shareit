@@ -13,7 +13,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByOwner_Id(Long userId);
 
     @Query("select item from Item item " +
-            "where item.request_id = ?1")
+            "where item.requestId = ?1")
     List<Item> findByRequestId(Long requestId);
 
     @Query("select item from Item item " +

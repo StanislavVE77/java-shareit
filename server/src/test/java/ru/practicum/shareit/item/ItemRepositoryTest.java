@@ -42,7 +42,7 @@ public class ItemRepositoryTest {
 
     @Test
     void findByRequestId() {
-        List<Item> itemsByRequestId = itemRepository.findByRequestId(item1.getRequest_id());
+        List<Item> itemsByRequestId = itemRepository.findByRequestId(item1.getRequestId());
 
         assertEquals(itemsByRequestId.size(), 1, "Число предметов по ID запроса (request_id=1) должно быть равным 1");
     }

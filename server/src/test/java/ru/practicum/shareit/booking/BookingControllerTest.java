@@ -75,7 +75,7 @@ public class BookingControllerTest {
 
     @Test
     @Order(1)
-    void GetBookings() throws Exception {
+    void getBookings() throws Exception {
         String state = "ALL";
         long userId = 2L;
 
@@ -99,7 +99,7 @@ public class BookingControllerTest {
                 "\"name\":\"Username2\"," +
                 "\"email\":\"user2@shareit.ru\"" +
                 "}," +
-                "\"request_id\":2" +
+                "\"requestId\":2" +
                 "}," +
                 "\"status\":\"WAITING\"" +
                 "},{ " +
@@ -121,7 +121,7 @@ public class BookingControllerTest {
                 "\"name\":\"Username2\"," +
                 "\"email\":\"user2@shareit.ru\"" +
                 "}," +
-                "\"request_id\":null" +
+                "\"requestId\":null" +
                 "}," +
                 "\"status\":\"APPROVED\"" +
                 "}]";
@@ -139,7 +139,7 @@ public class BookingControllerTest {
 
     @Test
     @Order(2)
-    void GetBooking() throws Exception {
+    void getBooking() throws Exception {
         long userId = 2L;
 
         String jsonBooking1 = objectMapper().writeValueAsString(bookingDto1);

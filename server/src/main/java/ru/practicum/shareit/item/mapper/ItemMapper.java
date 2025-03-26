@@ -60,7 +60,7 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
-        item.setRequest_id(itemDto.getRequestId());
+        item.setRequestId(itemDto.getRequestId());
 
         User user = new User();
         user.setId(curUser.getId());

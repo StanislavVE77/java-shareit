@@ -66,7 +66,7 @@ public class UserControllerTest {
 
     @Test
     @Order(1)
-    void GetUser() throws Exception {
+    void getUser() throws Exception {
         long userId = 2L;
 
         String jsonUser1 = new ObjectMapper().writeValueAsString(userDto1);

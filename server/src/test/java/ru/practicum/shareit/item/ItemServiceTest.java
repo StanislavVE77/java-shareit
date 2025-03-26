@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
