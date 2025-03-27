@@ -13,15 +13,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.StateStatus;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,28 +53,31 @@ public class BookingControllerTest {
         return objectMapper;
     }
 
-    private final TestData testData = new TestData();
-
     private final BookingMapper bookingMapper = new BookingMapper();
 
-    BookingDto bookingDto1;
-    BookingDto bookingDto2;
-    BookingDto bookingDto3;
-    BookingDto createdBookingDto;
-    BookingDto updatedBookingDto;
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    Item item1 = new Item(2L, "Item2", "Description2", true, user1, 2L);
+    Item item2 = new Item(3L, "Item3", "Описание", false, user1, null);
+    Comment comment2 = new Comment(3L, "comment3", item2, user2, Instant.parse("2025-03-11T00:00:01.00Z"));
+    Comment comment3 = new Comment(4L, "comment4", item2, user1, Instant.parse("2025-03-12T00:00:01.00Z"));
+    Booking newBooking = new Booking(1L, LocalDateTime.of(2025, 3, 5, 0, 0, 1), LocalDateTime.of(2025, 4, 5, 0, 0, 1), item1, user1, BookingStatus.REJECTED);
+    Booking updateBooking = new Booking(2L, LocalDateTime.of(2025, 3, 28, 0, 0, 1), LocalDateTime.of(2025, 4, 1, 0, 0, 1), item1, user1, BookingStatus.WAITING);
+    Booking booking1 = new Booking(2L, LocalDateTime.of(2025, 3, 28, 0, 0, 1), LocalDateTime.of(2025, 4, 1, 0, 0, 1), item1, user1, BookingStatus.WAITING);
+    Booking booking2 = new Booking(3L, LocalDateTime.of(2025, 1, 1, 0, 0, 1), LocalDateTime.of(2025, 2, 1, 0, 0, 1), item1, user2, BookingStatus.CANCELED);
+    Booking booking3 = new Booking(4L, LocalDateTime.of(2025, 3, 5, 0, 0, 1), LocalDateTime.of(2025, 3, 12, 0, 0, 1), item2, user1, BookingStatus.APPROVED);
+    BookingDto bookingDto1 = bookingMapper.toBookingDto(booking1);
+    BookingDto bookingDto2 = bookingMapper.toBookingDto(booking2);
+    BookingDto bookingDto3 = bookingMapper.toBookingDto(booking3);
+    BookingDto createdBookingDto = bookingMapper.toBookingDto(newBooking);
+    BookingDto updatedBookingDto = bookingMapper.toBookingDto(updateBooking);
 
     @BeforeEach
     void setUp(WebApplicationContext wac) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .build();
-
-        bookingDto1 = bookingMapper.toBookingDto(testData.booking1);
-        bookingDto2 = bookingMapper.toBookingDto(testData.booking2);
-        bookingDto3 = bookingMapper.toBookingDto(testData.booking3);
-        createdBookingDto = bookingMapper.toBookingDto(testData.newBooking);
-        updatedBookingDto = bookingMapper.toBookingDto(testData.updateBooking);
-
     }
 
     @Test

@@ -12,11 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
 
@@ -38,15 +38,16 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final TestData testData = new TestData();
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     private final UserMapper userMapper = new UserMapper();
 
-    private UserDto userDto1;
-    private UserDto userDto2;
-    private UserDto userDto3;
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    private UserDto userDto1 = userMapper.toUserDto(user1);
+    private UserDto userDto2 = userMapper.toUserDto(user2);
+    private UserDto userDto3 = userMapper.toUserDto(user3);
     private UserCreateDto newUserDto;
     private UserDto createdUserDto;
     private UserUpdateDto updateUserDto;
@@ -58,10 +59,6 @@ public class UserControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .build();
-
-        userDto1 = userMapper.toUserDto(testData.user1);
-        userDto2 = userMapper.toUserDto(testData.user2);
-        userDto3 = userMapper.toUserDto(testData.user3);
     }
 
     @Test

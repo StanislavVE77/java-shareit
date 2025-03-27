@@ -14,14 +14,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestWithItemsDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -49,29 +51,30 @@ public class ItemRequestControllerTest {
         return objectMapper;
     }
 
-    private final TestData testData = new TestData();
-
     private final ItemRequestMapper requestMapper = new ItemRequestMapper();
 
-    ItemRequestDto itemRequestDto1;
-    ItemRequestDto itemRequestDto2;
-    ItemRequestDto itemRequestDto3;
-    List<Item> items;
-    ItemRequestWithItemsDto requestWithItems;
-    ItemRequestDto createdRequestDto;
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    ItemRequest newRequest = new ItemRequest(1L, "Request description 1", Instant.parse("2025-03-01T18:22:23.00Z"), user1);
+    ItemRequest request1 = new ItemRequest(2L, "Request description 2", Instant.parse("2025-03-01T18:22:23.00Z"), user2);
+    ItemRequest request2 = new ItemRequest(3L, "Request description 3", Instant.parse("2025-03-03T00:00:00.00Z"), user3);
+    ItemRequest request3 = new ItemRequest(4L, "Request description 4", Instant.parse("2025-03-04T00:00:00.00Z"), user1);
+    Item item1 = new Item(2L, "Item2", "Description2", true, user1, 2L);
+    Item item2 = new Item(3L, "Item3", "Описание", false, user1, null);
+    Item item3 = new Item(4L, "Item4", "Description4", true, user1, null);
+    ItemRequestDto itemRequestDto1 = requestMapper.toItemRequestDto(request1);
+    ItemRequestDto itemRequestDto2 = requestMapper.toItemRequestDto(request2);
+    ItemRequestDto itemRequestDto3 = requestMapper.toItemRequestDto(request3);
+    List<Item> items = List.of(item1, item2, item3);
+    ItemRequestWithItemsDto requestWithItems = requestMapper.toItemRequestWithItemsDto(request3, items);
+    ItemRequestDto createdRequestDto = requestMapper.toItemRequestDto(newRequest);
 
     @BeforeEach
     void setUp(WebApplicationContext wac) {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .build();
-
-        itemRequestDto1 = requestMapper.toItemRequestDto(testData.request1);
-        itemRequestDto2 = requestMapper.toItemRequestDto(testData.request2);
-        itemRequestDto3 = requestMapper.toItemRequestDto(testData.request3);
-        items = List.of(testData.item1, testData.item2, testData.item3);
-        requestWithItems = requestMapper.toItemRequestWithItemsDto(testData.request3, items);
-        createdRequestDto = requestMapper.toItemRequestDto(testData.newRequest);
     }
 
     @Test

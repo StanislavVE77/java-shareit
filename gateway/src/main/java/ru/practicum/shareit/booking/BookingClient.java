@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
-import ru.practicum.shareit.booking.model.StateStatus;
+import ru.practicum.shareit.booking.dto.StateStatus;
 import ru.practicum.shareit.client.BaseClient;
 
 @Service

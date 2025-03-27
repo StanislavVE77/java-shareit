@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
@@ -25,11 +25,13 @@ public class UserServiceTest {
     private final EntityManager em;
     private final UserService service;
     private final UserMapper mapper = new UserMapper();
-    private final TestData testData = new TestData();
 
-    UserDto userDto1 = mapper.toUserDto(testData.user1);
-    UserDto userDto2 = mapper.toUserDto(testData.user2);
-    UserDto userDto3 = mapper.toUserDto(testData.user3);
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    UserDto userDto1 = mapper.toUserDto(user1);
+    UserDto userDto2 = mapper.toUserDto(user2);
+    UserDto userDto3 = mapper.toUserDto(user3);
 
     List<UserDto> getUsers() {
         return List.of(userDto1, userDto2, userDto3);

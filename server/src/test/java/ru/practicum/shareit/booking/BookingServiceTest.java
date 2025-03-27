@@ -7,14 +7,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.StateStatus;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,11 +30,19 @@ public class BookingServiceTest {
     private final EntityManager em;
     private final BookingService service;
     private final BookingMapper mapper = new BookingMapper();
-    private final TestData testData = new TestData();
 
-    BookingDto bookingDto1 = mapper.toBookingDto(testData.booking1);
-    BookingDto bookingDto2 = mapper.toBookingDto(testData.booking2);
-    BookingDto bookingDto3 = mapper.toBookingDto(testData.booking3);
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    Item item1 = new Item(2L, "Item2", "Description2", true, user1, 2L);
+    Item item2 = new Item(3L, "Item3", "Описание", false, user1, null);
+    Item item3 = new Item(4L, "Item4", "Description4", true, user1, null);
+    Booking booking1 = new Booking(2L, LocalDateTime.of(2025, 3, 28, 0, 0, 1), LocalDateTime.of(2025, 4, 1, 0, 0, 1), item1, user1, BookingStatus.WAITING);
+    Booking booking2 = new Booking(3L, LocalDateTime.of(2025, 1, 1, 0, 0, 1), LocalDateTime.of(2025, 2, 1, 0, 0, 1), item1, user2, BookingStatus.CANCELED);
+    Booking booking3 = new Booking(4L, LocalDateTime.of(2025, 3, 5, 0, 0, 1), LocalDateTime.of(2025, 3, 12, 0, 0, 1), item2, user1, BookingStatus.APPROVED);
+    BookingDto bookingDto1 = mapper.toBookingDto(booking1);
+    BookingDto bookingDto2 = mapper.toBookingDto(booking2);
+    BookingDto bookingDto3 = mapper.toBookingDto(booking3);
 
     List<BookingDto> getBookings() {
         return List.of(bookingDto1, bookingDto3);
@@ -65,7 +75,7 @@ public class BookingServiceTest {
 
         assertEquals(bookingDto1, booking);
         assertTrue(bookingDto1.equals(booking));
-        assertFalse(testData.booking1.equals(testData.booking2));
+        assertFalse(booking1.equals(booking2));
 
         assertThrows(NotFoundException.class, () -> {
             service.getBooking(2L, userNotFoundId);

@@ -7,13 +7,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.TestData;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,15 +30,23 @@ public class ItemServiceTest {
     private final ItemService service;
     private final ItemMapper itemMapper = new ItemMapper();
     private final CommentMapper commentMapper = new CommentMapper();
-    private final TestData testData = new TestData();
 
+    User user1 = new User(2L, "Username2", "user2@shareit.ru");
+    User user2 = new User(3L, "Username3", "user3@shareit.ru");
+    User user3 = new User(4L, "Username4", "user4@shareit.ru");
+    Item item1 = new Item(2L, "Item2", "Description2", true, user1, 2L);
+    Item item2 = new Item(3L, "Item3", "Описание", false, user1, null);
+    Item item3 = new Item(4L, "Item4", "Description4", true, user1, null);
+    Comment comment1 = new Comment(2L, "comment2", item1, user2, Instant.parse("2025-03-10T00:00:01.00Z"));
+    Comment comment2 = new Comment(3L, "comment3", item2, user2, Instant.parse("2025-03-11T00:00:01.00Z"));
+    Comment comment3 = new Comment(4L, "comment4", item2, user1, Instant.parse("2025-03-12T00:00:01.00Z"));
 
-    ItemDto itemDto1 = itemMapper.toItemDto(testData.item1);
-    ItemDto itemDto2 = itemMapper.toItemDto(testData.item2);
-    ItemDto itemDto3 = itemMapper.toItemDto(testData.item3);
-    CommentDto commentDto1 = commentMapper.toCommentDto(testData.comment1);
-    CommentDto commentDto2 = commentMapper.toCommentDto(testData.comment2);
-    CommentDto commentDto3 = commentMapper.toCommentDto(testData.comment3);
+    ItemDto itemDto1 = itemMapper.toItemDto(item1);
+    ItemDto itemDto2 = itemMapper.toItemDto(item2);
+    ItemDto itemDto3 = itemMapper.toItemDto(item3);
+    CommentDto commentDto1 = commentMapper.toCommentDto(comment1);
+    CommentDto commentDto2 = commentMapper.toCommentDto(comment2);
+    CommentDto commentDto3 = commentMapper.toCommentDto(comment3);
     List<CommentDto> comments = List.of(commentDto1, commentDto2);
 
     BookingShortDto booking2 = new BookingShortDto(2L, LocalDateTime.of(2025, 1, 1, 0, 0, 1),
